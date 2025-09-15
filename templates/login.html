@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center" style="margin-top: 5vh;">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" style="height: 50px;" class="mb-3">
+                    <h3 class="card-title">Admin Login</h3>
+                    <p class="text-muted">Sign in to the AssetPro dashboard.</p>
+                </div>
+                <form method="post">
+                    <div class="mb-3"><label for="username" class="form-label">Username</label><input type="text" class="form-control" id="username" name="username" required></div>
+                    <div class="mb-4"><label for="password" class="form-label">Password</label><input type="password" class="form-control" id="password" name="password" required></div>
+                    <div class="d-grid"><button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-sign-in-alt me-2"></i>Login</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

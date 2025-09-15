@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1 class="page-title">Employee Profile</h1>
+    <a href="{{ url_for('index') }}" class="btn btn-light"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <i class="fas fa-user-circle fa-5x text-muted my-3"></i>
+                <h4 class="fw-bold">{{ person.first_name }} {{ person.last_name }}</h4>
+                <p class="text-muted mb-1">Employee ID: {{ person.employee_id }}</p>
+                <p class="text-muted mb-4">
+                    <i class="fas fa-envelope me-1"></i> {{ person.email or 'No email provided' }}
+                </p>
+                <a href="{{ url_for('edit_person', id=person.id) }}" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Assigned Assets</h3>
+                <a href="{{ url_for('add_item') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Assign New Item</a>
+            </div>
+            <div class="table-wrapper">
+                <table class="table mb-0">
+                    <thead>
+                        <tr><th>Item Type</th><th>Serial Number</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.item_type | capitalize }}</td>
+                                <td>{{ item.serial_number }}</td>
+                                <td><span class="badge bg-success">{{ item.status | capitalize }}</span></td>
+                                <td class="action-cell">
+                                    <a href="#" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ url_for('delete_item', id=item.id) }}" method="post" class="d-inline" onsubmit="return confirmDeleteItem()"><button type="submit" class="text-danger" title="Delete"><i class="fas fa-trash"></i></button></form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="4" class="text-center text-muted p-4">No assets assigned.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
