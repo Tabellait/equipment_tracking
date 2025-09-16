@@ -19,15 +19,22 @@
             </div>
             <ul class="sidebar-nav">
                 <li><a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' else '' }}"><i class="fas fa-home nav-icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('employees') }}" class="{{ 'active' if request.endpoint == 'employees' else '' }}"><i class="fas fa-users nav-icon"></i> Employees</a></li>
+                <li><a href="{{ url_for('assets') }}" class="{{ 'active' if request.endpoint == 'assets' else '' }}"><i class="fas fa-box nav-icon"></i> Assets</a></li>
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                <li><a href="{{ url_for('users') }}" class="{{ 'active' if request.endpoint == 'users' else '' }}"><i class="fas fa-user-shield nav-icon"></i> Users</a></li>
                 <li><a href="{{ url_for('add_person') }}" class="{{ 'active' if request.endpoint == 'add_person' else '' }}"><i class="fas fa-user-plus nav-icon"></i> Add Employee</a></li>
                 <li><a href="{{ url_for('add_item') }}" class="{{ 'active' if request.endpoint == 'add_item' else '' }}"><i class="fas fa-box nav-icon"></i> Add Item</a></li>
                 <li>
                     <a href="#" class="submenu-toggle"><i class="fas fa-cog nav-icon"></i> Actions <i class="fas fa-chevron-down ms-auto fa-xs"></i></a>
                     <ul class="nav-submenu">
+                        <li><a href="{{ url_for('add_user') }}">Add User</a></li>
                         <li><a href="{{ url_for('import_csv') }}">Import CSV</a></li>
                         <li><a href="{{ url_for('export_csv') }}">Export CSV</a></li>
                     </ul>
                 </li>
+                {% endif %}
+                <li><a href="{{ url_for('change_password') }}" class="{{ 'active' if request.endpoint == 'change_password' else '' }}"><i class="fas fa-key nav-icon"></i> Change Password</a></li>
             </ul>
             <div class="sidebar-logout">
                 <ul class="sidebar-nav">

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="main-content">
     <div class="page-header">
-        <h1 class="page-title">Add Inventory Item</h1>
+        <h1 class="page-title">Edit Inventory Item</h1>
     </div>
 
     <div class="card">
@@ -11,51 +11,43 @@
                 <div class="mb-3">
                     <label for="item_type" class="form-label">Item Type</label>
                     <select name="item_type" id="item_type" class="form-select" required>
-                        <option value="Laptop">Laptop</option>
-                        <option value="Monitor">Monitor</option>
-                        <option value="Desktop">Desktop</option>
-                        <option value="Phone">Phone</option>
-                        <option value="Other">Other</option>
+                        <option value="Laptop" {% if item.item_type == 'Laptop' %}selected{% endif %}>Laptop</option>
+                        <option value="Monitor" {% if item.item_type == 'Monitor' %}selected{% endif %}>Monitor</option>
+                        <option value="Desktop" {% if item.item_type == 'Desktop' %}selected{% endif %}>Desktop</option>
+                        <option value="Phone" {% if item.item_type == 'Phone' %}selected{% endif %}>Phone</option>
+                        <option value="Other" {% if item.item_type == 'Other' %}selected{% endif %}>Other</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="serial_number" class="form-label">Serial Number</label>
-                    <input type="text" name="serial_number" id="serial_number" class="form-control" required>
+                    <input type="text" name="serial_number" id="serial_number" class="form-control" value="{{ item.serial_number }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="details" class="form-label">Details</label>
-                    <textarea name="details" id="details" class="form-control"></textarea>
+                    <textarea name="details" id="details" class="form-control">{{ item.details or '' }}</textarea>
                 </div>
 
-                {% if pre_assigned_person %}
-                <div class="mb-3">
-                    <label class="form-label">Assigned To</label>
-                    <p class="form-control-plaintext">{{ pre_assigned_person.first_name }} {{ pre_assigned_person.last_name }}</p>
-                    <input type="hidden" name="assigned_to" value="{{ pre_assigned_person.id }}">
-                </div>
-                {% else %}
                 <div class="mb-3 form-check">
-                    <input type="checkbox" name="is_stock" id="is_stock" class="form-check-input">
-                    <label for="is_stock" class="form-check-label">Add to Stock (Unassigned)</label>
+                    <input type="checkbox" name="is_stock" id="is_stock" class="form-check-input" {% if not item.assigned_to_id %}checked{% endif %}>
+                    <label for="is_stock" class="form-check-label">Set to Stock (Unassigned)</label>
                 </div>
 
-                <div class="mb-3" id="assigned_to_group">
+                <div class="mb-3" id="assigned_to_group" {% if not item.assigned_to_id %}style="display: none;"{% endif %}>
                     <label for="assigned_to" class="form-label">Assigned To</label>
                     <input type="text" id="assigned_to_search" class="form-control" placeholder="Search employees...">
-                    <select name="assigned_to" id="assigned_to" class="form-select mt-2" style="display: none;" required>
+                    <select name="assigned_to" id="assigned_to" class="form-select mt-2" style="display: none;" {% if item.assigned_to_id %}required{% endif %}>
                         <option value="">-- Select Person --</option>
                         {% for p in people %}
-                            <option value="{{ p.id }}" data-name="{{ p.first_name }} {{ p.last_name }}">{{ p.first_name }} {{ p.last_name }}</option>
+                            <option value="{{ p.id }}" data-name="{{ p.first_name }} {{ p.last_name }}" {% if item.assigned_to_id == p.id %}selected{% endif %}>{{ p.first_name }} {{ p.last_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                {% endif %}
 
                 <div class="d-flex gap-2">
-                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Add Item</button>
+                    <a href="{% if item.assigned_to_id %}{{ url_for('person_detail', id=item.assigned_to_id) }}{% else %}{{ url_for('assets') }}{% endif %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Item</button>
                 </div>
             </form>
         </div>
